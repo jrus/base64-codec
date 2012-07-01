@@ -13,7 +13,7 @@ of 4. It does not include trailing '=' in its own output. It uses the
 Base64 = do ->
     alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'
     trailingPad = '='
-    padChar = alphabet.charAt(alphabet.length - 1)
+    padChar = alphabet.substr -1
 
     decodeMap = {}
     (decodeMap[char] = idx) for char, idx in alphabet
@@ -50,13 +50,13 @@ Base64 = do ->
         # strip trailing pad characters from input; # XXX maybe some better way?
         i = b64text.length
         while (b64text.charAt --i) == trailingPad then # pass
-        b64text = b64text.slice(0, i + 1)
+        b64text = b64text.slice 0, i + 1
 
         if alphabet_inverse.test b64text
             throw new Error 'Input contains out-of-range characters.'
 
         padLength = 4 - ((b64text.length % 4) or 4)
-        padding = Array(padLength + 1).join(padChar)
+        padding = (new Array padLength + 1).join padChar
 
         b64text += padding # pad with last letter of alphabet
 
