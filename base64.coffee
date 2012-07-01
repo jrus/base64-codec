@@ -1,6 +1,9 @@
 ###
 "URL-safe" Base64 Codec, by Jacob Rus
 
+Input to Base64.encode and output from Base64.decode is a string where each
+character encodes one byte.
+
 This library happily strips off as many trailing '=' as are included in the
 input to 'decode', and doesn't worry whether its length is an even multiple
 of 4. It does not include trailing '=' in its own output. It uses the
