@@ -71,7 +71,7 @@ Base64 = do ->
                 (newchars)         & 0xFF)
 
         length = (out_array.length -= padLength)
-        result = String.fromCharCode out_array...
+        String.fromCharCode out_array...
 
     {encode, decode}
 
