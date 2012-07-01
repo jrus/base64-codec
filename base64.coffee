@@ -21,9 +21,6 @@ Base64 = do ->
     alphabet_inverse = new RegExp '[^' + (alphabet.replace '-', '\\-') + ']'
     high_byte_character = /[^\x00-\xFF]/
 
-    assertOrBadInput = (exp, message) ->
-        throw new Error message unless exp
-
     encode = (bytes) ->
         if high_byte_character.test bytes
             throw new Error 'Input contains out-of-range characters.'
