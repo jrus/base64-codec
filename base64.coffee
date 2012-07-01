@@ -19,13 +19,14 @@ Base64 = do ->
     (decodeMap[char] = idx) for char, idx in alphabet
 
     alphabet_inverse = new RegExp '[^' + (alphabet.replace '-', '\\-') + ']'
+    high_byte_character = /[^\x00-\xFF]/
 
     assertOrBadInput = (exp, message) ->
         throw new Error message unless exp
 
     encode = (bytes) ->
-        assertOrBadInput(!(/[^\x00-\xFF]/.test(bytes)), # disallow two-byte chars
-            'Input contains out-of-range characters.')
+        if high_byte_character.test bytes
+            throw new Error 'Input contains out-of-range characters.'
         padding = '\x00\x00\x00'.slice (bytes.length % 3) or 3
         bytes += padding # pad with null bytes
         out_array = []
@@ -51,8 +52,8 @@ Base64 = do ->
         while (b64text.charAt --i) == trailingPad then # pass
         b64text = b64text.slice(0, i + 1)
 
-        assertOrBadInput(!alphabet_inverse.test(b64text),
-            'Input contains out-of-range characters.')
+        if alphabet_inverse.test b64text
+            throw new Error 'Input contains out-of-range characters.'
 
         padLength = 4 - ((b64text.length % 4) or 4)
         padding = Array(padLength + 1).join(padChar)
